@@ -80,24 +80,30 @@ public class BinarySearchTreeRQ implements Runqueue {
 
 	@Override
 	public boolean findProcess(String procLabel) {
-		return checkNodeExistance(this.root, procLabel);
-	} // end of findProcess()
-
-	private boolean checkNodeExistance(BSTNode root, String procLabel) {
-		if (root != null) {
-			if (root.getProcess().getLabel().equals(procLabel)) {
-				return true;
-			} else {
-				return checkNodeExistance(root.getLeftNode(), procLabel)
-						|| checkNodeExistance(root.getRightNode(), procLabel);
-			}
+		if (checkNodeExistance(this.root, procLabel)!=null) {
+			return true;
 		}
 		return false;
+//		return checkNodeExistance(this.root, procLabel);
+	} // end of findProcess()
+
+	private BSTNode checkNodeExistance(BSTNode root, String procLabel) {
+		if (root != null) {
+			if (root.getProcess().getLabel().equals(procLabel)) {
+				return root;
+			} else {
+				if(checkNodeExistance(root.getLeftNode(), procLabel)!=null)
+					return checkNodeExistance(root.getLeftNode(), procLabel);
+				return checkNodeExistance(root.getRightNode(), procLabel);
+			}
+		}
+		return null;
 	}
 
 	@Override
 	public boolean removeProcess(String procLabel) {
 		// Implement me
+		
 
 		return false; // placeholder, modify this
 	} // end of removeProcess()
