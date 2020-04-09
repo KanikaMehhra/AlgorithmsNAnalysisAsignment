@@ -21,7 +21,6 @@ public class BinarySearchTreeRQ implements Runqueue {
 		this.root = null;
 	} // end of BinarySearchTreeRQ()
 
-	
 	@Override
 	public void enqueue(String procLabel, int vt) {
 		Proc newProcess = new Proc(procLabel, vt);
@@ -34,21 +33,17 @@ public class BinarySearchTreeRQ implements Runqueue {
 	}
 
 	public BSTNode addBSTNodeRecursively(BSTNode root, BSTNode newNode) {
-		/* If the tree node is empty, return a new node. */
+		// If the tree node is empty, return a new node.
 		if (root == null) {
 			root = newNode;
 			return root;
 		}
-
-		/*
-		 * Otherwise, recur down the tree and add the element to the required position.
-		 */
+		// Otherwise, recur down the tree and add the element to the required position.
 		if (newNode.getProcess().getVt() < root.getProcess().getVt())
 			root.setLeftNode(addBSTNodeRecursively(root.getLeftNode(), newNode));
 		else if (newNode.getProcess().getVt() >= root.getProcess().getVt())
 			root.setRightNode(addBSTNodeRecursively(root.getRightNode(), newNode));
-
-		/* return the root */
+		// return the root
 		return root;
 	}
 
@@ -72,8 +67,7 @@ public class BinarySearchTreeRQ implements Runqueue {
 	private String minValue(BSTNode node) {
 		BSTNode current = node;
 		BSTNode parentNode = null;
-
-		/* loop down to find the leftmost leaf */
+		// loop down to find the leftmost leaf
 		while (current.getLeftNode() != null) {
 			parentNode = current;
 			current = current.getLeftNode();
@@ -86,10 +80,20 @@ public class BinarySearchTreeRQ implements Runqueue {
 
 	@Override
 	public boolean findProcess(String procLabel) {
-		// Implement me
-
-		return false; // placeholder, modify this
+		return checkNodeExistance(this.root, procLabel);
 	} // end of findProcess()
+
+	private boolean checkNodeExistance(BSTNode root, String procLabel) {
+		if (root != null) {
+			if (root.getProcess().getLabel().equals(procLabel)) {
+				return true;
+			} else {
+				return checkNodeExistance(root.getLeftNode(), procLabel)
+						|| checkNodeExistance(root.getRightNode(), procLabel);
+			}
+		}
+		return false;
+	}
 
 	@Override
 	public boolean removeProcess(String procLabel) {
@@ -114,13 +118,7 @@ public class BinarySearchTreeRQ implements Runqueue {
 
 	@Override
 	public void printAllProcesses(PrintWriter os) {
-		// os.flush();
 		printTimeLine(this.root, os);
-
-		// timeLine
-
-		// Implement me
-
 	} // end of printAllProcess()
 
 	public void printTimeLine(BSTNode node, PrintWriter os) {
