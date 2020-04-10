@@ -125,7 +125,7 @@ public class BinarySearchTreeRQ implements Runqueue {
 			root.setLeftNode(deleteNode(root.getLeftNode(), key));
 		}
 		// if given key is more than the root node, recur for right subtree
-		else if (key >= root.getProcess().getVt()) {
+		else if (key >root.getProcess().getVt()) {
 			root.setRightNode(deleteNode(root.getRightNode(), key));
 		}
 		// key found
