@@ -22,9 +22,9 @@ class Proc {
         this.vt = vt;
     }
     
-//    public void setLabel(String procLabel) {
-//        this.procLabel = procLabel;
-//    }
+    public void setLabel(String procLabel) {
+        this.procLabel = procLabel;
+    }
 
     public boolean searchByVt(int vt) {
         if (this.vt == vt) {

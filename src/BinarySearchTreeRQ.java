@@ -149,7 +149,7 @@ public class BinarySearchTreeRQ implements Runqueue {
 
 				// Copy the value of predecessor to current node
 				root.getProcess().setVt(predecessor.getProcess().getVt());
-//				root.getProcess().setLabel(predecessor.getProcess().getLabel());
+				root.getProcess().setLabel(predecessor.getProcess().getLabel());
 
 				// recursively delete the predecessor. Note that the
 				// predecessor will have at-most one child (left child)
