@@ -124,14 +124,17 @@ public class BinarySearchTreeRQ implements Runqueue {
 
 	@Override
 	public void printAllProcesses(PrintWriter os) {
+		os.flush();
 		printTimeLine(this.root, os);
+		os.print("\n");
+		os.close();
 	} // end of printAllProcess()
 
 	public void printTimeLine(BSTNode node, PrintWriter os) {
 		if (node == null)
 			return;
 		printTimeLine(node.getLeftNode(), os);
-		os.flush();
+//		os.flush();
 		os.print(node.getProcess().getLabel());
 		printTimeLine(node.getRightNode(), os);
 
