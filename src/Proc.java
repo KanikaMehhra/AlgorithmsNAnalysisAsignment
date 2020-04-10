@@ -21,6 +21,10 @@ class Proc {
     public void setVt(int vt) {
         this.vt = vt;
     }
+    
+//    public void setLabel(String procLabel) {
+//        this.procLabel = procLabel;
+//    }
 
     public boolean searchByVt(int vt) {
         if (this.vt == vt) {
