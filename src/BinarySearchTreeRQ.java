@@ -11,6 +11,8 @@ import java.lang.String;
  */
 public class BinarySearchTreeRQ implements Runqueue {
 	protected BSTNode root;
+	protected int preceedingTime, succeedingTime = -1;
+
 	/**
 	 * Constructs empty queue
 	 */
@@ -140,7 +142,8 @@ public class BinarySearchTreeRQ implements Runqueue {
 				// Copy the value of predecessor to current node
 				root.getProcess().setVt(predecessor.getProcess().getVt());
 				root.getProcess().setLabel(predecessor.getProcess().getLabel());
-				// recursively delete the predecessor. Note that the predecessor will have at-most one child (left child)
+				// recursively delete the predecessor. Note that the predecessor will have
+				// at-most one child (left child)
 				root.setLeftNode(deleteNode(root.getLeftNode(), predecessor.getProcess().getVt()));
 			}
 			// Case 3: node to be deleted has only one child
@@ -156,28 +159,42 @@ public class BinarySearchTreeRQ implements Runqueue {
 	@Override
 	public int precedingProcessTime(String procLabel) {
 		// Implement me
-		int preceedingTime=-1;
-		BSTNode nodeExists=checkNodeExistance(this.root, procLabel);
-		if(nodeExists!=null) {
-			preceedingTime=addPreceedingTime(nodeExists.getLeftNode());
+		this.preceedingTime = -1;
+		BSTNode nodeExists = checkNodeExistance(this.root, procLabel);
+		if (nodeExists != null) {
+			this.preceedingTime = 0;
+			addPreceedingTime(this.root, nodeExists.getProcess().getVt());	
 		}
 		return preceedingTime; // placeholder, modify this
 	} // end of precedingProcessTime()
-	
-	public int addPreceedingTime(BSTNode root)  
-	{  
-	    if (root == null)  
-	        return 0;  
-	    return (root.getProcess().getVt() + addPreceedingTime(root.getLeftNode()) +  
-	    		addPreceedingTime(root.getRightNode()));  
+
+	public void addPreceedingTime(BSTNode node, int procVt) {
+		if (node == null) {
+			return;
+		}
+		addPreceedingTime(node.getLeftNode(), procVt);
+		if (node.getProcess().getVt() < procVt)
+			this.preceedingTime += node.getProcess().getVt();
+		addPreceedingTime(node.getRightNode(), procVt);
 	}
 
 	@Override
 	public int succeedingProcessTime(String procLabel) {
-		// Implement me
-
-		return -1; // placeholder, modify this
+		int succeedingTime = -1;
+		// BSTNode nodeExists=checkNodeExistance(this.root, procLabel);
+		// if(nodeExists!=null) {
+		// succeedingTime=addSucceedingTime(this.root.getRightNode());
+		// }
+		return succeedingTime;
 	} // end of precedingProcessTime()
+
+	// public int addSucceedingTime(BSTNode root)
+	// {
+	// if (root == null)
+	// return 0;
+	// return (root.getProcess().getVt() + addSucceedingTime(root.getLeftNode()) +
+	// addSucceedingTime(root.getRightNode()));
+	// }
 
 	@Override
 	public void printAllProcesses(PrintWriter os) {
