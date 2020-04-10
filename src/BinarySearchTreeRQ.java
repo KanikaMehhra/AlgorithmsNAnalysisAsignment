@@ -192,18 +192,39 @@ public class BinarySearchTreeRQ implements Runqueue {
 		if (nodeExists != null) {
 			this.succeedingTime = 0;
 			addSucceedingTime(this.root, nodeExists);	
+			addSucceedingFIFOCount(nodeExists.getRightNode(),nodeExists.getProcess().getVt());
+//			this.succeedingTime+=
 		}
 		return succeedingTime; 
 	} // end of precedingProcessTime()
 
 	public void addSucceedingTime(BSTNode root, BSTNode nodeExists) {
+//		boolean found=false;
 		if (root == null) {
 			return;
 		}
 		addSucceedingTime(root.getLeftNode(), nodeExists);
-		if ((!root.getProcess().getLabel().equals(nodeExists.getProcess().getLabel())) && root.getProcess().getVt() >= nodeExists.getProcess().getVt())
+		if(root.getProcess().getVt() > nodeExists.getProcess().getVt())
 			this.succeedingTime += root.getProcess().getVt();
+//		
+//		if(root.getProcess().getLabel().equals(nodeExists.getProcess().getLabel()))
+//			found=true;
+//		if(root.getProcess().getVt()==nodeExists.getProcess().getVt() && !found)
+//			return;
+//		else if ((!root.getProcess().getLabel().equals(nodeExists.getProcess().getLabel())) && root.getProcess().getVt() >= nodeExists.getProcess().getVt())
+//			this.succeedingTime += root.getProcess().getVt();
+//		
 		addSucceedingTime(root.getRightNode(), nodeExists);
+	}
+	
+	public void addSucceedingFIFOCount(BSTNode root, int procVt) {
+		if(root==null) {
+			return;
+		}
+		addSucceedingFIFOCount(root.getLeftNode(), procVt);
+		if(root.getProcess().getVt()==procVt)
+			this.succeedingTime+=procVt;
+		addSucceedingFIFOCount(root.getRightNode(), procVt);
 	}
 	// public int addSucceedingTime(BSTNode root)
 	// {
