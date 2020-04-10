@@ -163,31 +163,48 @@ public class BinarySearchTreeRQ implements Runqueue {
 		BSTNode nodeExists = checkNodeExistance(this.root, procLabel);
 		if (nodeExists != null) {
 			this.preceedingTime = 0;
-			addPreceedingTime(this.root, nodeExists.getProcess().getVt());	
+			addPreceedingTime(this.root, nodeExists);	
 		}
 		return preceedingTime; // placeholder, modify this
 	} // end of precedingProcessTime()
 
-	public void addPreceedingTime(BSTNode node, int procVt) {
-		if (node == null) {
+	public void addPreceedingTime(BSTNode root, BSTNode nodeExists) {
+		boolean found=false;
+		if (root == null) {
 			return;
 		}
-		addPreceedingTime(node.getLeftNode(), procVt);
-		if (node.getProcess().getVt() < procVt)
-			this.preceedingTime += node.getProcess().getVt();
-		addPreceedingTime(node.getRightNode(), procVt);
+		addPreceedingTime(root.getLeftNode(), nodeExists);
+		if(root.getProcess().getLabel().equals(nodeExists.getProcess().getLabel())) {
+			found=true;
+			return;
+		}
+		if(found) 
+			return;
+		else if (root.getProcess().getVt() <= nodeExists.getProcess().getVt())
+			this.preceedingTime += root.getProcess().getVt();
+		addPreceedingTime(root.getRightNode(), nodeExists);
 	}
 
 	@Override
 	public int succeedingProcessTime(String procLabel) {
-		int succeedingTime = -1;
-		// BSTNode nodeExists=checkNodeExistance(this.root, procLabel);
-		// if(nodeExists!=null) {
-		// succeedingTime=addSucceedingTime(this.root.getRightNode());
-		// }
-		return succeedingTime;
+		this.succeedingTime = -1;
+		BSTNode nodeExists = checkNodeExistance(this.root, procLabel);
+		if (nodeExists != null) {
+			this.succeedingTime = 0;
+			addSucceedingTime(this.root, nodeExists);	
+		}
+		return succeedingTime; 
 	} // end of precedingProcessTime()
 
+	public void addSucceedingTime(BSTNode root, BSTNode nodeExists) {
+		if (root == null) {
+			return;
+		}
+		addSucceedingTime(root.getLeftNode(), nodeExists);
+		if ((!root.getProcess().getLabel().equals(nodeExists.getProcess().getLabel())) && root.getProcess().getVt() >= nodeExists.getProcess().getVt())
+			this.succeedingTime += root.getProcess().getVt();
+		addSucceedingTime(root.getRightNode(), nodeExists);
+	}
 	// public int addSucceedingTime(BSTNode root)
 	// {
 	// if (root == null)
