@@ -12,6 +12,7 @@ import java.lang.String;
 public class BinarySearchTreeRQ implements Runqueue {
 	protected BSTNode root;
 	protected int preceedingTime, succeedingTime = -1;
+	protected BSTNode toBeDeletedNode=null;
 
 	/**
 	 * Constructs empty queue
@@ -101,8 +102,8 @@ public class BinarySearchTreeRQ implements Runqueue {
 	@Override
 	public boolean removeProcess(String procLabel) {
 		if (findProcess(procLabel)) {
-			BSTNode toBeDeleted = checkNodeExistance(this.root, procLabel);
-			this.root = deleteNode(this.root, toBeDeleted.getProcess().getVt());
+			this.toBeDeletedNode = checkNodeExistance(this.root, procLabel);
+			this.root = deleteNode(this.root, this.toBeDeletedNode.getProcess().getVt());
 			return true;
 		}
 		return false;
@@ -114,29 +115,96 @@ public class BinarySearchTreeRQ implements Runqueue {
 		}
 		return ptr;
 	}
+	
+	public BSTNode deleteNode(BSTNode root, int key)
+	{
+		// base case: key not found in tree
+		if (root == null) {
+			return root;
+		}
 
-	public BSTNode deleteNode(BSTNode root, int key) {
+		// if given key is less than the root node, recur for left subtree
+		if (key < root.getProcess().getVt()) {
+			root.setLeftNode(deleteNode(root.getLeftNode(), key));
+		}
+		
+		// if given key is more than the root node, recur for right subtree
+		else if (key > root.getProcess().getVt()) {
+			root.setRightNode(deleteNode(root.getRightNode(), key));
+		}
+		else if((!root.getProcess().getLabel().equals(this.toBeDeletedNode.getProcess().getLabel())) && root.getProcess().getVt()==key) {
+			root.setRightNode(deleteNode(root.getRightNode(), key));
+		}
+		// key found
+		else
+		{
+			// Case 1: node to be deleted has no children (it is a leaf node)
+			if (root.getLeftNode() == null && root.getRightNode() == null)
+			{
+				// update root to null
+				return null;
+			}
+
+			// Case 2: node to be deleted has two children
+			else if (root.getLeftNode() != null && root.getRightNode() != null)
+			{
+				// find its in-order predecessor node
+				BSTNode predecessor = maximumKey(root.getLeftNode());
+
+				// Copy the value of predecessor to current node
+				root.setProcess(predecessor.getProcess());
+
+				// recursively delete the predecessor. Note that the
+				// predecessor will have at-most one child (left child)
+				root.setLeftNode(deleteNode(root.getLeftNode(),predecessor.getProcess().getVt()));
+			}
+
+			// Case 3: node to be deleted has only one child
+			else
+			{
+				// find child node
+				BSTNode child = (root.getLeftNode() != null)? root.getLeftNode(): root.getRightNode();
+				root = child;
+			}
+		}
+
+		return root;
+	}
+
+/*	public BSTNode deleteNode(BSTNode root, BSTNode toBeDeletedNode) {
 		// base case: key not found in tree
 		if (root == null) {
 			return root;
 		}
 		// if given key is less than the root node, recur for left subtree
-		if (key < root.getProcess().getVt()) {
-			root.setLeftNode(deleteNode(root.getLeftNode(), key));
+		if (toBeDeletedNode.getProcess().getVt() < root.getProcess().getVt()) {
+			root.setLeftNode(deleteNode(root.getLeftNode(), toBeDeletedNode));
 		}
+//		else if((!root.getProcess().getLabel().equals(toBeDeletedNode.getProcess().getLabel())) && root.getProcess().getVt()==toBeDeletedNode.getProcess().getVt()) {
+//			root.setRightNode(deleteNode(root.getRightNode(), toBeDeletedNode));
+//		}
 		// if given key is more than the root node, recur for right subtree
-		else if (key >root.getProcess().getVt()) {
-			root.setRightNode(deleteNode(root.getRightNode(), key));
+		else if (toBeDeletedNode.getProcess().getVt() >root.getProcess().getVt()) {
+			root.setRightNode(deleteNode(root.getRightNode(), toBeDeletedNode));
 		}
 		// key found
 		else {
+//			if(!root.getProcess().getLabel().equals(toBeDeletedNode.getProcess().getLabel())) {
+////				root.setRightNode(deleteNode(root.getRightNode(), toBeDeletedNode));
+//				root=root.getRightNode();
+//				deleteNode(root, toBeDeletedNode);
+//			}
+			System.out.println(root.getProcess().getLabel());
 			// Case 1: node to be deleted has no children (it is a leaf node)
 			if (root.getLeftNode() == null && root.getRightNode() == null) {
 				// update root to null
+				System.out.println(root.getProcess().getLabel()+"case1");
 				return null;
 			}
 			// Case 2: node to be deleted has two children
 			else if (root.getLeftNode() != null && root.getRightNode() != null) {
+				System.out.println(root.getProcess().getLabel()+"case2");
+
 				// find its in-order predecessor node
 				BSTNode predecessor = maximumKey(root.getLeftNode());
 				// Copy the value of predecessor to current node
@@ -144,18 +212,20 @@ public class BinarySearchTreeRQ implements Runqueue {
 				root.getProcess().setLabel(predecessor.getProcess().getLabel());
 				// recursively delete the predecessor. Note that the predecessor will have
 				// at-most one child (left child)
-				root.setLeftNode(deleteNode(root.getLeftNode(), predecessor.getProcess().getVt()));
+				root.setLeftNode(deleteNode(root.getLeftNode(), predecessor));
+//				return root;
 			}
 			// Case 3: node to be deleted has only one child
 			else {
 				// find child node
+				System.out.println(root.getProcess().getLabel()+"case3");
 				BSTNode child = (root.getLeftNode() != null) ? root.getLeftNode() : root.getRightNode();
 				root = child;
 			}
 		}
 		return root;
 	}
-
+*/
 	@Override
 	public int precedingProcessTime(String procLabel) {
 		// Implement me
@@ -264,6 +334,10 @@ public class BinarySearchTreeRQ implements Runqueue {
 		public BSTNode(Proc process) {
 			this.process = process;
 			this.leftNode = this.rightNode = null;
+		}
+
+		public void setProcess(Proc process) {
+			this.process = process;		
 		}
 
 		public Proc getProcess() {
