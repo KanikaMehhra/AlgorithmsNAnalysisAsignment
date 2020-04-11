@@ -13,6 +13,7 @@ public class BinarySearchTreeRQ implements Runqueue {
 	protected BSTNode root;
 	protected int preceedingTime, succeedingTime = -1;
 	protected BSTNode toBeDeletedNode = null;
+	protected BSTNode lastNode = null;
 
 	/**
 	 * Constructs empty queue
@@ -26,6 +27,7 @@ public class BinarySearchTreeRQ implements Runqueue {
 		Proc newProcess = new Proc(procLabel, vt);
 		BSTNode newNode = new BSTNode(newProcess);
 		addBSTNode(newNode);
+		this.lastNode=maximumKey(this.root);
 	} // end of enqueue()
 
 	public void addBSTNode(BSTNode newNode) {
@@ -243,7 +245,10 @@ public class BinarySearchTreeRQ implements Runqueue {
 		if (node == null)
 			return;
 		printTimeLine(node.getLeftNode(), os);
-		os.print(node.getProcess().getLabel() + " ");
+		if(node==this.lastNode)
+			os.printf("%s", node.getProcess().getLabel());
+		else
+			os.printf("%s ", node.getProcess().getLabel());
 		printTimeLine(node.getRightNode(), os);
 
 	}
