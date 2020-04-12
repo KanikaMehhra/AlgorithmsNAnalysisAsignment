@@ -10,10 +10,10 @@ import java.lang.String;
  * @author Sajal Halder, Minyi Li, Jeffrey Chan
  */
 public class BinarySearchTreeRQ implements Runqueue {
-	protected BSTNode root;
-	protected int preceedingTime, succeedingTime = -1;
-	protected BSTNode toBeDeletedNode = null;
-	protected BSTNode lastNode = null;
+	private BSTNode root;
+	private int preceedingTime, succeedingTime = -1;
+	private BSTNode toBeDeletedNode = null;
+	private BSTNode lastNode = null;
 
 	/**
 	 * Constructs empty queue
@@ -30,11 +30,11 @@ public class BinarySearchTreeRQ implements Runqueue {
 		this.lastNode=maximumKey(this.root);
 	} // end of enqueue()
 
-	public void addBSTNode(BSTNode newNode) {
+	private void addBSTNode(BSTNode newNode) {
 		this.root = addBSTNodeRecursively(this.root, newNode);
 	}
 
-	public BSTNode addBSTNodeRecursively(BSTNode root, BSTNode newNode) {
+	private BSTNode addBSTNodeRecursively(BSTNode root, BSTNode newNode) {
 		// If the tree node is empty, return a new node.
 		if (root == null) {
 			root = newNode;
@@ -111,14 +111,14 @@ public class BinarySearchTreeRQ implements Runqueue {
 		return false;
 	} // end of removeProcess()
 
-	public BSTNode maximumKey(BSTNode ptr) {
+	private BSTNode maximumKey(BSTNode ptr) {
 		while (ptr.getRightNode() != null) {
 			ptr = ptr.getRightNode();
 		}
 		return ptr;
 	}
 
-	public BSTNode deleteNode(BSTNode root, int key) {
+	private BSTNode deleteNode(BSTNode root, int key) {
 		// base case: key not found in tree
 		if (root == null) {
 			return root;
@@ -179,7 +179,7 @@ public class BinarySearchTreeRQ implements Runqueue {
 		return preceedingTime; // placeholder, modify this
 	} // end of precedingProcessTime()
 
-	public void addPreceedingTime(BSTNode root, BSTNode nodeExists) {
+	private void addPreceedingTime(BSTNode root, BSTNode nodeExists) {
 		boolean found = false;
 		if (root == null) {
 			return;
@@ -209,7 +209,7 @@ public class BinarySearchTreeRQ implements Runqueue {
 		return succeedingTime;
 	} // end of precedingProcessTime()
 
-	public void addSucceedingTime(BSTNode root, BSTNode nodeExists) {
+	private void addSucceedingTime(BSTNode root, BSTNode nodeExists) {
 		if (root == null) {
 			return;
 		}
@@ -219,7 +219,7 @@ public class BinarySearchTreeRQ implements Runqueue {
 		addSucceedingTime(root.getRightNode(), nodeExists);
 	}
 
-	public void addSucceedingFIFOCount(BSTNode root, int procVt) {
+	private void addSucceedingFIFOCount(BSTNode root, int procVt) {
 		if (root == null) {
 			return;
 		}
@@ -233,7 +233,7 @@ public class BinarySearchTreeRQ implements Runqueue {
 	public void printAllProcesses(PrintWriter os) {
 		try {
 			printTimeLine(this.root, os);
-			os.println();
+			os.print("\n");
 		} catch (Exception e) {
 			System.out.println("Exception caught:" + e);
 		} finally {
@@ -241,7 +241,7 @@ public class BinarySearchTreeRQ implements Runqueue {
 		}
 	} // end of printAllProcess()
 
-	public void printTimeLine(BSTNode node, PrintWriter os) {
+	private void printTimeLine(BSTNode node, PrintWriter os) {
 		if (node == null)
 			return;
 		printTimeLine(node.getLeftNode(), os);
@@ -254,36 +254,36 @@ public class BinarySearchTreeRQ implements Runqueue {
 	}
 
 	private class BSTNode {
-		protected Proc process;
-		protected BSTNode leftNode;
-		protected BSTNode rightNode;
+		private Proc process;
+		private BSTNode leftNode;
+		private BSTNode rightNode;
 
 		public BSTNode(Proc process) {
 			this.process = process;
 			this.leftNode = this.rightNode = null;
 		}
 
-		public void setProcess(Proc process) {
+		private void setProcess(Proc process) {
 			this.process = process;
 		}
 
-		public Proc getProcess() {
+		private Proc getProcess() {
 			return this.process;
 		}
 
-		public BSTNode getLeftNode() {
+		private BSTNode getLeftNode() {
 			return this.leftNode;
 		}
 
-		public void setLeftNode(BSTNode leftNode) {
+		private void setLeftNode(BSTNode leftNode) {
 			this.leftNode = leftNode;
 		}
 
-		public BSTNode getRightNode() {
+		private BSTNode getRightNode() {
 			return this.rightNode;
 		}
 
-		public void setRightNode(BSTNode rightNode) {
+		private void setRightNode(BSTNode rightNode) {
 			this.rightNode = rightNode;
 		}
 
