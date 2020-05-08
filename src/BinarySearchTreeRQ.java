@@ -27,7 +27,7 @@ public class BinarySearchTreeRQ implements Runqueue {
 		Proc newProcess = new Proc(procLabel, vt);
 		BSTNode newNode = new BSTNode(newProcess);
 		addBSTNode(newNode);
-		this.lastNode=maximumKey(this.root);
+		this.lastNode = maximumKey(this.root);
 	} // end of enqueue()
 
 	private void addBSTNode(BSTNode newNode) {
@@ -57,11 +57,12 @@ public class BinarySearchTreeRQ implements Runqueue {
 		else if (this.root.getLeftNode() == null && this.root.getRightNode() == null) {
 			deletedProcessLabel = this.root.getProcess().getLabel();
 			this.root = null;
-		} else if (this.root.getLeftNode() != null)
-			deletedProcessLabel = minValue(root);
-		else {
+		} else if (this.root.getLeftNode() == null && this.root.getRightNode() != null) {
 			deletedProcessLabel = this.root.getProcess().getLabel();
 			this.root = this.root.getRightNode();
+		}
+		else {
+			deletedProcessLabel = minValue(root);
 		}
 		return deletedProcessLabel;
 	} // end of dequeue()
@@ -106,16 +107,17 @@ public class BinarySearchTreeRQ implements Runqueue {
 		if (findProcess(procLabel)) {
 			this.toBeDeletedNode = checkNodeExistence(this.root, procLabel);
 			this.root = deleteNode(this.root, this.toBeDeletedNode.getProcess().getVt());
+			this.lastNode = maximumKey(this.root);
 			return true;
 		}
 		return false;
 	} // end of removeProcess()
 
-	private BSTNode maximumKey(BSTNode ptr) {
-		while (ptr.getRightNode() != null) {
-			ptr = ptr.getRightNode();
+	private BSTNode maximumKey(BSTNode node) {
+		while (node.getRightNode() != null) {
+			node = node.getRightNode();
 		}
-		return ptr;
+		return node;
 	}
 
 	private BSTNode deleteNode(BSTNode root, int key) {
@@ -245,12 +247,22 @@ public class BinarySearchTreeRQ implements Runqueue {
 		if (node == null)
 			return;
 		printTimeLine(node.getLeftNode(), os);
-		if(node==this.lastNode)
+		if (node == this.lastNode)
 			os.printf("%s", node.getProcess().getLabel());
 		else
 			os.printf("%s ", node.getProcess().getLabel());
 		printTimeLine(node.getRightNode(), os);
 
+	}
+	
+	//This method is used solely for the purpose of data generations.
+	private String findMax(){
+		return this.lastNode.getProcess().getLabel();
+	}
+	
+	//This method is used solely for the purpose of data generations.
+	private String findMin(){
+		return this.root.getProcess().getLabel();
 	}
 
 	private class BSTNode {
